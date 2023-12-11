@@ -1,6 +1,6 @@
-﻿namespace PasswordManager.Models
+﻿namespace PasswordManager.ViewModels
 {
-    public class MyPasswords : BaseEntity
+    public class MyPasswordsViewModel : BaseViewModel
     {
         public string Description { get; set; }
 
@@ -11,11 +11,5 @@
         public string Password { get; set; }
 
         public int CategoryID { get; set; }
-
-        public Categories Categories { get; set; }
-
-        public string UserID { get; set; }
-
-        public AppUser AppUser { get; set; }
     }
 }

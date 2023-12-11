@@ -1,11 +1,10 @@
-using FluentValidation.AspNetCore;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
-using PasswordManager.Models;
 using PasswordManager.Mapping;
+using PasswordManager.Models;
 using PasswordManager.Validators;
-using PasswordManager.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 

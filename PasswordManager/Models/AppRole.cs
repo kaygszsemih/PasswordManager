@@ -2,7 +2,7 @@
 
 namespace PasswordManager.Models
 {
-    public class AppRole:IdentityRole
+    public class AppRole : IdentityRole
     {
     }
 }
