@@ -1,0 +1,178 @@
+﻿@model List<CategoriesViewModel>
+
+@{
+    ViewData["Title"] = "Kategori Listesi";
+}
+
+<div class="card card-flush">
+    <div class="card-header align-items-center py-5 gap-2 gap-md-5">
+        <div class="card-title">
+
+            <div class="d-flex align-items-center position-relative my-1">
+                <input type="text" data-kt-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Ara" />
+            </div>
+            <div id="CategoryTable_export" class="d-none"></div>
+        </div>
+
+        <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
+
+            <a href="/Categories/CreateNewCategory/" class="btn btn-light-success">Kategori Ekle</a>
+            <button type="button" class="btn btn-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Dışa Aktar</button>
+
+            <div id="CategoryTable_export_menu" class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-200px py-4" data-kt-menu="true">
+                <div class="menu-item px-3">
+                    <a href="#" class="menu-link px-3" data-kt-export="excel">
+                        Excell'e Aktar
+                    </a>
+                </div>
+                <div class="menu-item px-3">
+                    <a href="#" class="menu-link px-3" data-kt-export="pdf">
+                        PDF'e Aktar
+                    </a>
+                </div>
+                <div class="menu-item px-3">
+                    <a href="#" class="menu-link px-3" data-kt-export="copy">
+                        Kopyala
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="CategoryTable" class="table align-middle border rounded table-row-dashed fs-6 g-5">
+            <thead>
+                <tr class="text-start text-gray-400 fw-bolder text-nowrap fs-7 text-uppercase">
+                    <th>Kategori Adı</th>
+                    <th>Sil</th>
+                    <th>Düzenle</th>
+                </tr>
+            </thead>
+            <tbody class="fw-bold text-nowrap">
+                @foreach (var item in Model)
+                {
+                    <tr class="odd">
+                        <td>@item.CategoryName</td>
+                        <td>
+                            <button type="button" data-id="@item.Id" class="btn btn-icon btn-danger deleteButton"><i class="fas fa-regular fa-trash fs-2"></i></button>
+                        </td>
+                        <td>
+                            <a href="/Categories/UpdateCategory?id=@item.Id" class="btn btn-icon btn-info"><i class="bi bi-pencil-square fs-2"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var KTDatatablesButtons = function () {
+            var table;
+            var datatable;
+
+            var initDatatable = function () {
+                const tableRows = table.querySelectorAll('tbody tr');
+
+                tableRows.forEach(row => {
+                    const dateRow = row.querySelectorAll('td');
+                    const realDate = moment(dateRow[3].innerHTML, "DD MMM YYYY, LT").format();
+                    dateRow[3].setAttribute('data-order', realDate);
+                });
+
+                datatable = $('#CategoryTable').DataTable({
+                    "responsive": true,
+                    "info": false,
+                    'order': [],
+                    'pageLength': 10,
+                });
+            }
+
+            var exportButtons = () => {
+                const documentTitle = 'Kategori Listesi';
+                var buttons = new $.fn.dataTable.Buttons(table, {
+                    buttons: [
+                        {
+                            extend: 'copyHtml5',
+                            title: documentTitle
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            title: documentTitle
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            title: documentTitle
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            title: documentTitle
+                        }
+                    ]
+                }).container().appendTo($('#CategoryTable_export'));
+
+                const exportButtons = document.querySelectorAll('#CategoryTable_export_menu [data-kt-export]');
+                exportButtons.forEach(exportButton => {
+                    exportButton.addEventListener('click', e => {
+                        e.preventDefault();
+
+                        const exportValue = e.target.getAttribute('data-kt-export');
+                        const target = document.querySelector('.dt-buttons .buttons-' + exportValue);
+
+                        target.click();
+                    });
+                });
+            }
+
+            var handleSearchDatatable = () => {
+                const filterSearch = document.querySelector('[data-kt-filter="search"]');
+                filterSearch.addEventListener('keyup', function (e) {
+                    datatable.search(e.target.value).draw();
+                });
+            }
+
+            return {
+                init: function () {
+                    table = document.querySelector('#CategoryTable');
+
+                    if (!table) {
+                        return;
+                    }
+
+                    initDatatable();
+                    exportButtons();
+                    handleSearchDatatable();
+                }
+            };
+        }();
+
+        KTUtil.onDOMContentLoaded(function () {
+            KTDatatablesButtons.init();
+        });
+    </script>
+    <script>
+        $('#CategoryTable').on('click', '.deleteButton', function (e) {
+            e.preventDefault();
+
+            const categoryID = e.currentTarget.getAttribute("data-id");
+
+            Swal.fire({
+                html: `<strong>Seçilen Kaydı Silmek İstediğinizden Emin Misiniz?</strong>`,
+                icon: "info",
+                buttonsStyling: false,
+                showCancelButton: true,
+                confirmButtonText: "Evet, Eminim",
+                cancelButtonText: 'Hayır, Geri Dön',
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: 'btn btn-danger'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/Categories/DeleteCategory?id=${categoryID}`;
+                }
+            });
+
+        });
+    </script>
+}

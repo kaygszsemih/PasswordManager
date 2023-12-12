@@ -19,7 +19,6 @@
     <link href="~/assets/css/style.bundle.css" rel="stylesheet" />
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/l10n/tr.js"></script>
-
 </head>
 <body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed" style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
 
@@ -55,194 +54,52 @@
                             <div class="menu-item">
                                 <a class="menu-link" href="~/Home/Index">
                                     <span class="menu-icon">
-                                        <i class="bi bi-house fs-3"></i>
+                                        <i class="bi bi-house fs-1"></i>
                                     </span>
                                     <span class="menu-title">Ana Sayfa</span>
                                 </a>
                             </div>
 
                             <div class="menu-item">
-                                <a class="menu-link" href="~/AracHareketleri/AracHareketListesi">
+                                <a class="menu-link" href="~/Passwords/PasswordList">
                                     <span class="menu-icon">
-                                        <i class="fa fa-light fa-car-side fs-4"></i>
+                                        <i class="bi bi-file-earmark-lock fs-1"></i>
                                     </span>
-                                    <span class="menu-title">Araç Hareketleri</span>
+                                    <span class="menu-title">Şifrelerim</span>
                                 </a>
                             </div>
 
                             <div class="menu-item">
-                                <a class="menu-link" href="~/MisafirHareketleri/MisafirHareketListesi">
+                                <a class="menu-link" href="~/Passwords/CreateNewPassword">
                                     <span class="menu-icon">
-                                        <i class="bi bi-person fs-3"></i>
+                                        <i class="bi bi-key fs-1"></i>
                                     </span>
-                                    <span class="menu-title">Misafir Hareketleri</span>
+                                    <span class="menu-title">Yeni Şifre Kaydı</span>
                                 </a>
                             </div>
 
                             <div class="menu-item">
-                                <a class="menu-link" href="~/EvrakHareketleri/EvrakHareketListesi">
+                                <a class="menu-link" href="~/Categories/CreateNewCategory">
                                     <span class="menu-icon">
-                                        <i class="bi bi-file-earmark fs-3"></i>
+                                        <i class="bi bi-bookmark-plus fs-1"></i>
                                     </span>
-                                    <span class="menu-title">Evrak Teslim Hareketleri</span>
+                                    <span class="menu-title">Yeni Kategori Ekle</span>
                                 </a>
                             </div>
 
                             <div class="menu-item">
-                                <a class="menu-link" href="~/TaseronHareketleri/TaseronHareketListesi">
+                                <a class="menu-link" href="~/User/KullaniciListesi">
                                     <span class="menu-icon">
-                                        <i class="bi bi-building fs-3"></i>
+                                        <i class="bi bi-person-rolodex fs-1"></i>
                                     </span>
-                                    <span class="menu-title">Taşeron Firma Hareketleri</span>
+                                    <span class="menu-title">Kullanıcı İşlemlerim</span>
                                 </a>
                             </div>
 
                             <div class="menu-item">
-                                <a class="menu-link" href="~/GeceOlaylari/GeceOlaylari">
+                                <a class="menu-link" href="~/Session/Logout">
                                     <span class="menu-icon">
-                                        <i class="bi bi-moon fs-3"></i>
-                                    </span>
-                                    <span class="menu-title">Gece Olayları</span>
-                                </a>
-                            </div>
-                            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-                                <span class="menu-link">
-                                    <span class="menu-icon">
-                                        <span class="svg-icon svg-icon-2">
-                                            <i class="bi bi-bar-chart fs-3"></i>
-                                        </span>
-                                    </span>
-                                    <span class="menu-title">Raporlar</span>
-                                    <span class="menu-arrow"></span>
-                                </span>
-                                <div class="menu-sub menu-sub-accordion menu-active-bg">
-
-                                    <div class="menu-item">
-                                        <a class="menu-link" href="~/Raporlar/TaseronPersoneliHareketleri">
-                                            <span class="menu-bullet">
-                                                <span class="bullet bullet-dot"></span>
-                                            </span>
-                                            <span class="menu-title">Hareket İle Gelen Personel</span>
-                                        </a>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <div data-kt-menu-trigger="click" class="menu-item menu-accordion show">
-                                <span class="menu-link">
-                                    <span class="menu-icon">
-                                        <span class="svg-icon svg-icon-2">
-                                            <i class="bi bi-file-diff fs-3"></i>
-                                        </span>
-                                    </span>
-                                    <span class="menu-title">Genel Tanımlar</span>
-                                    <span class="menu-arrow"></span>
-                                </span>
-                                <div class="menu-sub menu-sub-accordion menu-active-bg">
-
-                                    <div class="menu-item">
-                                        <a class="menu-link" href="~/Araclar/AracListesi">
-                                            <span class="menu-bullet">
-                                                <span class="bullet bullet-dot"></span>
-                                            </span>
-                                            <span class="menu-title">Araç Bilgileri</span>
-                                        </a>
-                                    </div>
-
-                                    <div class="menu-item">
-                                        <a class="menu-link" href="~/Lokasyon/LokasyonListesi">
-                                            <span class="menu-bullet">
-                                                <span class="bullet bullet-dot"></span>
-                                            </span>
-                                            <span class="menu-title">Lokasyon Bilgileri</span>
-                                        </a>
-                                    </div>
-
-                                    <div class="menu-item">
-                                        <a class="menu-link" href="~/Personel/PersonelListesi">
-                                            <span class="menu-bullet">
-                                                <span class="bullet bullet-dot"></span>
-                                            </span>
-                                            <span class="menu-title">Personel Bilgileri</span>
-                                        </a>
-                                    </div>
-
-                                    <div class="menu-item">
-                                        <a class="menu-link" href="~/Proje/ProjeListesi">
-                                            <span class="menu-bullet">
-                                                <span class="bullet bullet-dot"></span>
-                                            </span>
-                                            <span class="menu-title">Proje Bilgileri</span>
-                                        </a>
-                                    </div>
-
-                                    <div class="menu-item">
-                                        <a class="menu-link" href="~/ProjePersonel/ProjePersonelListesi">
-                                            <span class="menu-bullet">
-                                                <span class="bullet bullet-dot"></span>
-                                            </span>
-                                            <span class="menu-title">Proje Bazlı Personel Bilgisi</span>
-                                        </a>
-                                    </div>
-
-                                    <div class="menu-item">
-                                        <a class="menu-link" href="~/Taseron/TaseronListesi">
-                                            <span class="menu-bullet">
-                                                <span class="bullet bullet-dot"></span>
-                                            </span>
-                                            <span class="menu-title">Taşeron Firma Bilgileri</span>
-                                        </a>
-                                    </div>
-
-                                    <div class="menu-item">
-                                        <a class="menu-link" href="~/Lokasyon/DemirbasListesi">
-                                            <span class="menu-bullet">
-                                                <span class="bullet bullet-dot"></span>
-                                            </span>
-                                            <span class="menu-title">Demirbaş Bilgileri</span>
-                                        </a>
-                                    </div>
-
-                                    <div class="menu-item">
-                                        <a class="menu-link" href="~/Bilgilendirme/BilgilendirmeAyari">
-                                            <span class="menu-bullet">
-                                                <span class="bullet bullet-dot"></span>
-                                            </span>
-                                            <span class="menu-title">Bilgilendirme Tanımı</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="menu-item">
-                                <a class="menu-link" href="~/Kullanici/KullaniciListesi">
-                                    <span class="menu-icon">
-                                        <i class="bi bi-person-rolodex fs-3"></i>
-                                    </span>
-                                    <span class="menu-title">Kullanıcı İşlemleri</span>
-                                </a>
-                            </div>
-
-                            <div class="menu-item">
-                                <a class="menu-link" href="~/Bilgilendirme/TalepBildirimi">
-                                    <span class="menu-icon">
-                                        <i class="bi bi-info-square" fs-3"></i>
-                                    </span>
-                                    <span class="menu-title">Talep Bildirimi</span>
-                                </a>
-                            </div>
-                            @*                             <div class="menu-item">
-                            <a class="menu-link" href="~/Home/YapimAsamasinda">
-                            <span class="menu-icon">
-                            <i class="bi bi-layers fs-3"></i>
-                            </span>
-                            <span class="menu-title">Firma İşlemleri</span>
-                            </a>
-                            </div> *@
-                            <div class="menu-item">
-                                <a class="menu-link" href="~/Login/Logout">
-                                    <span class="menu-icon">
-                                        <i class="bi bi-door-open fs-3"></i>
+                                        <i class="bi bi-door-open fs-1"></i>
                                     </span>
                                     <span class="menu-title">Çıkış</span>
                                 </a>

@@ -17,10 +17,14 @@ namespace PasswordManager.Models
             builder.Entity<MyPasswords>(x => x.Property(t => t.URL).HasMaxLength(250).IsRequired());
             builder.Entity<MyPasswords>(x => x.Property(t => t.UserName).HasMaxLength(25).IsRequired());
             builder.Entity<MyPasswords>(x => x.Property(t => t.Password).HasMaxLength(50).IsRequired());
+            builder.Entity<MyPasswords>(x => x.Property(t => t.CreatedDate).HasColumnType("timestamp without time zone"));
+            builder.Entity<MyPasswords>(x => x.Property(t => t.UpdatedDate).HasColumnType("timestamp without time zone"));
 
             builder.Entity<Categories>(x => x.HasKey(t => t.Id));
             builder.Entity<Categories>(x => x.Property(t => t.Id).UseIdentityColumn());
             builder.Entity<Categories>(x => x.Property(t => t.CategoryName).HasMaxLength(25).IsRequired());
+            builder.Entity<Categories>(x => x.Property(t => t.CreatedDate).HasColumnType("timestamp without time zone"));
+            builder.Entity<Categories>(x => x.Property(t => t.UpdatedDate).HasColumnType("timestamp without time zone"));
 
             builder.Entity<Categories>().HasMany(x => x.MyPasswords).WithOne(x => x.Categories).HasForeignKey(x => x.CategoryID);
             builder.Entity<AppUser>().HasMany(x => x.MyPasswords).WithOne(x => x.AppUser).HasForeignKey(x => x.UserID);

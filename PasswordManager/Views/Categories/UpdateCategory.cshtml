@@ -1,0 +1,42 @@
+﻿@model CategoriesViewModel
+@{
+    ViewData["Title"] = "Kategori Kaydı";
+}
+<div class="row">
+    <div class="col-lg-6">
+
+        <div class="card">
+            <div class="card-body">
+
+                <form method="post" autocomplete="off" class="form" asp-controller="Categories" asp-action="CreateNewCategory">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="row fv-row mb-7">
+                        <div class="col-md-4">
+                            <label asp-for="CategoryName" class="fs-6 fw-bold form-label mt-3">Gece Olayı Başlangıç Saati</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control form-control-solid" asp-for="CategoryName" />
+                            <span asp-validation-for="CategoryName" class="text-danger fw-bold"></span>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="col-md-9 offset-md-3">
+                <div class="d-flex justify-content-end">
+                    <a href="/Categories/CategoryList/" class="btn btn-light me-3">Geri</a>
+                    <button type="submit" data-kt-ecommerce-settings-type="submit" id="submitBtn" class="btn btn-success">
+                        <span class="indicator-label">Kaydet</span>
+                        <span class="indicator-progress">
+                            Please wait...
+                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

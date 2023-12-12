@@ -1,9 +1,14 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
 using PasswordManager.Mapping;
 using PasswordManager.Models;
+using PasswordManager.OptionModels;
+using PasswordManager.Repositories;
+using PasswordManager.RepositoryManager;
+using PasswordManager.Utils;
 using PasswordManager.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,19 +30,50 @@ builder.Services.AddRazorPages(x =>
     CloseButton = true
 });
 
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<CategoriesRepo>();
+builder.Services.AddScoped<MyPasswordsRepo>();
+
+
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<PasswordResetMail>();
 builder.Services.AddControllersWithViews();
-builder.Services.AddFluentValidationAutoValidation();
+
+builder.Services.AddFluentValidationAutoValidation(options =>
+    options.DisableDataAnnotationsValidation = true);
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<MyPasswordsValidator>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(typeof(MapProfile));
 //builder.Services.AddScoped(typeof(NotFoundFilter<>));
 
-builder.Services.AddSession(options =>
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromHours(1));
+
+builder.Services.AddIdentity<AppUser, AppRole>(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(10);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
+    options.User.RequireUniqueEmail = true;
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnoprstuvwxyz1234567890_";
+
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireDigit = false;
+
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
+    options.Lockout.MaxFailedAccessAttempts = 3;
+}).AddDefaultTokenProviders().AddEntityFrameworkStores<AppDbContext>();
+
+builder.Services.ConfigureApplicationCookie(opt =>
+{
+    var cookieBuilder = new CookieBuilder();
+
+    cookieBuilder.Name = "PasswordManagerCookie";
+    opt.LoginPath = new PathString("/Session/SignIn");
+    opt.LogoutPath = new PathString("/Session/SignOut");
+    opt.Cookie = cookieBuilder;
+    opt.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+    opt.SlidingExpiration = true;
 });
 
 var app = builder.Build();
