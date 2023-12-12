@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using NToastNotify;
 using PasswordManager.Models;
 using PasswordManager.Utils;
 using PasswordManager.ViewModels;
@@ -13,13 +11,12 @@ namespace PasswordManager.Controllers
         private readonly UserManager<AppUser> userManager;
         private readonly SignInManager<AppUser> signInManager;
         private readonly PasswordResetMail emailService;
-        private readonly IToastNotification toastNotification;
 
-        public SessionController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IToastNotification toastNotification)
+        public SessionController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, PasswordResetMail emailService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
-            this.toastNotification = toastNotification;
+            this.emailService = emailService;
         }
 
         public IActionResult SignIn()
@@ -32,8 +29,8 @@ namespace PasswordManager.Controllers
         {
             if (!ModelState.IsValid)
             {
-				ModelState.AddModelError(string.Empty, "Email veya Şifre Yanlış");
-				return View();
+                ModelState.AddModelError(string.Empty, "Email veya Şifre Yanlış");
+                return View();
             }
 
             var user = await userManager.FindByEmailAsync(signInViewModel.Email);
@@ -58,7 +55,7 @@ namespace PasswordManager.Controllers
                 return View();
             }
 
-            return RedirectToAction(nameof(PasswordsController.PasswordList));
+            return RedirectToAction("PasswordList", "Passwords");
         }
 
         public IActionResult SignUp()
@@ -71,15 +68,15 @@ namespace PasswordManager.Controllers
         {
             if (!ModelState.IsValid)
             {
-				ModelState.AddModelError(string.Empty, "Eksik veya Hatalı Bilgi.");
-				return View();
+                ModelState.AddModelError(string.Empty, "Eksik veya Hatalı Bilgi.");
+                return View();
             }
 
             var result = await userManager.CreateAsync(new() { UserName = signUpViewModel.UserName, PhoneNumber = signUpViewModel.PhoneNumber, Email = signUpViewModel.Email }, signUpViewModel.PasswordConfirm);
 
             if (!result.Succeeded)
             {
-                foreach(IdentityError errors in result.Errors)
+                foreach (IdentityError errors in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, errors.Description);
                 }
@@ -87,7 +84,7 @@ namespace PasswordManager.Controllers
                 return View();
             }
 
-            toastNotification.AddSuccessToastMessage("Üye Kayıt İşlemi Tamamlandı. Lütfen Giriş Yapınız.");
+            TempData["SuccessMessage"] = "Üye Kayıt İşlemi Tamamlandı. Lütfen Giriş Yapınız.";
             return RedirectToAction(nameof(SignIn));
         }
 
@@ -99,12 +96,12 @@ namespace PasswordManager.Controllers
         [HttpPost]
         public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel forgetPasswordViewModel)
         {
-			if (!ModelState.IsValid)
-			{
-				return View();
-			}
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
 
-			var user = await userManager.FindByEmailAsync(forgetPasswordViewModel.Email);
+            var user = await userManager.FindByEmailAsync(forgetPasswordViewModel.Email);
 
             if (user == null)
             {
@@ -114,12 +111,12 @@ namespace PasswordManager.Controllers
 
             string token = await userManager.GeneratePasswordResetTokenAsync(user);
 
-            var resetLink = Url.Action("ResetPassword", "Session", new { userId = user.Id, token = token }, HttpContext.Request.Scheme);
+            var resetLink = Url.Action("ResetPassword", "Session", new { userId = user.Id, token }, HttpContext.Request.Scheme);
 
             await emailService.SendResetPasswordEmail(resetLink!, user.Email);
 
-            toastNotification.AddSuccessToastMessage("Şifre Yenileme E-Mail'i Gönderilmiştir.");
-            return RedirectToAction(nameof(ForgetPassword));
+            TempData["SuccessMessage"] = "Şifre Yenileme E-Mail'i Gönderilmiştir.";
+            return RedirectToAction(nameof(SignIn));
         }
 
         public IActionResult ResetPassword(string userId, string token)
@@ -152,15 +149,15 @@ namespace PasswordManager.Controllers
 
             if (result.Succeeded)
             {
-                toastNotification.AddSuccessToastMessage("Şifreniz Başaroyla Güncellenmiştir.");
+                TempData["SuccessMessage"] = "Şifreniz Başaroyla Güncellenmiştir.";
                 return RedirectToAction(nameof(SignIn));
             }
             else
             {
-                foreach(IdentityError error in result.Errors)
+                foreach (IdentityError error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
-                }                
+                }
             }
 
             return View();

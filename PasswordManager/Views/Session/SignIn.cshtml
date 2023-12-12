@@ -32,14 +32,20 @@
 				<!--begin::Wrapper-->
 				<div class="w-lg-500px bg-body rounded shadow-sm p-10 p-lg-15 mx-auto">
 					<!--begin::Form-->
-		@* 			<div asp-validation-summary=ModelOnly class="alert alert-danger" role="alert">
-					</div> *@
+					@if (TempData["SuccessMessage"] != null)
+					{
+						<div class="alert alert-success" role="alert">
+							@TempData["SuccessMessage"]
+						</div>
+					}
 					<form class="form w-100" novalidate="novalidate" method="post" autocomplete="off" asp-controller="Session" asp-action="SignIn">
 						<!--begin::Heading-->
 						<div class="text-center mb-10">
 							<!--begin::Title-->
 							<h1 class="text-dark mb-3">Giriş Yap</h1>
 							<!--end::Title-->
+						</div>
+						<div asp-validation-summary=ModelOnly class="alert alert-danger" role="alert">
 						</div>
 						<!--begin::Heading-->
 						<!--begin::Input group-->

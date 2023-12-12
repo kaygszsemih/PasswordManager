@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
@@ -10,25 +11,29 @@ using PasswordManager.ViewModels;
 
 namespace PasswordManager.Controllers
 {
-	[Authorize]
-	public class PasswordsController : Controller
+    [Authorize]
+    public class PasswordsController : Controller
     {
+        private readonly UserManager<AppUser> userManager;
         private readonly MyPasswordsRepo passwordRepo;
         private readonly CategoriesRepo categoryRepo;
         private readonly IMapper mapper;
         private readonly IToastNotification toastNotification;
 
-        public PasswordsController(MyPasswordsRepo passwordRepo, CategoriesRepo categoryRepo, IMapper mapper, IToastNotification toastNotification)
+        public PasswordsController(MyPasswordsRepo passwordRepo, CategoriesRepo categoryRepo, IMapper mapper, IToastNotification toastNotification, UserManager<AppUser> userManager)
         {
             this.passwordRepo = passwordRepo;
             this.categoryRepo = categoryRepo;
             this.mapper = mapper;
             this.toastNotification = toastNotification;
+            this.userManager = userManager;
         }
 
         public async Task<IActionResult> PasswordList()
         {
-            var data = await passwordRepo.GetAllAsync().Where(x => x.UserID == "").Include(x => x.Categories).AsNoTracking().ToListAsync();
+            var currentUser = await userManager.GetUserAsync(User);
+
+            var data = await passwordRepo.GetAllAsync().Where(x => x.UserID == currentUser.Id).Include(x => x.Categories).AsNoTracking().ToListAsync();
             var mapData = mapper.Map<List<MyPasswordWithCategory>>(data);
 
             return View(mapData);
@@ -36,7 +41,9 @@ namespace PasswordManager.Controllers
 
         public async Task<IActionResult> CreateNewPassword()
         {
-            var data = await categoryRepo.GetAllAsync().Where(x => x.UserID == "").AsNoTracking().ToListAsync();
+            var currentUser = await userManager.GetUserAsync(User);
+
+            var data = await categoryRepo.GetAllAsync().Where(x => x.UserID == currentUser.Id).AsNoTracking().ToListAsync();
             ViewBag.Categories = mapper.Map<List<CategoriesViewModel>>(data);
 
             return View();
@@ -51,6 +58,9 @@ namespace PasswordManager.Controllers
                 return RedirectToAction(nameof(CreateNewPassword));
             }
 
+            var currentUser = await userManager.GetUserAsync(User);
+            myPasswordsViewModel.UserID = currentUser.Id;
+
             await passwordRepo.CreateAsync(mapper.Map<MyPasswords>(myPasswordsViewModel));
             toastNotification.AddSuccessToastMessage("Yeni Şifre Kaydı Başarılı!");
 
@@ -62,7 +72,9 @@ namespace PasswordManager.Controllers
             var data = await passwordRepo.GetByIdAsync(id);
             var mapData = mapper.Map<MyPasswordsViewModel>(data);
 
-            var categoryData = await categoryRepo.GetAllAsync().Where(x => x.UserID == "").AsNoTracking().ToListAsync();
+            var currentUser = await userManager.GetUserAsync(User);
+
+            var categoryData = await categoryRepo.GetAllAsync().Where(x => x.UserID == currentUser.Id).AsNoTracking().ToListAsync();
             ViewBag.Categories = mapper.Map<List<CategoriesViewModel>>(categoryData);
 
             return View(mapData);

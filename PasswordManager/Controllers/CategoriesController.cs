@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
@@ -9,23 +10,26 @@ using PasswordManager.ViewModels;
 
 namespace PasswordManager.Controllers
 {
-	[Authorize]
-	public class CategoriesController : Controller
+    [Authorize]
+    public class CategoriesController : Controller
     {
+        private readonly UserManager<AppUser> userManager;
         private readonly CategoriesRepo categoryRepo;
         private readonly IMapper mapper;
         private readonly IToastNotification toastNotification;
 
-        public CategoriesController(CategoriesRepo categoryRepo, IMapper mapper, IToastNotification toastNotification)
+        public CategoriesController(CategoriesRepo categoryRepo, IMapper mapper, IToastNotification toastNotification, UserManager<AppUser> userManager)
         {
             this.categoryRepo = categoryRepo;
             this.mapper = mapper;
             this.toastNotification = toastNotification;
+            this.userManager = userManager;
         }
 
         public async Task<IActionResult> CategoryList()
         {
-            var data = await categoryRepo.GetAllAsync().Where(x => x.UserID == "").AsNoTracking().ToListAsync();
+            var currentUser = await userManager.GetUserAsync(User);
+            var data = await categoryRepo.GetAllAsync().Where(x => x.UserID == currentUser.Id).AsNoTracking().ToListAsync();
             var mapData = mapper.Map<List<CategoriesViewModel>>(data);
 
             return View(mapData);
@@ -60,13 +64,16 @@ namespace PasswordManager.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateCategory(CategoriesViewModel categoriesViewModel)
+        public async Task<IActionResult> UpdateCategory(CategoriesViewModel categoriesViewModel)
         {
             if (!ModelState.IsValid)
             {
                 toastNotification.AddWarningToastMessage("Bilgiler Doğrulanamadı!");
                 return RedirectToAction(nameof(UpdateCategory), new { id = categoriesViewModel.Id });
             }
+
+            var currentUser = await userManager.GetUserAsync(User);
+            categoriesViewModel.UserID = currentUser.Id;
 
             categoryRepo.Update(mapper.Map<Categories>(categoriesViewModel));
             toastNotification.AddSuccessToastMessage("Kategori Güncellendi");

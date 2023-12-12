@@ -1,7 +1,7 @@
-﻿using PasswordManager.OptionModels;
-using System.Net.Mail;
+﻿using Microsoft.Extensions.Options;
+using PasswordManager.OptionModels;
 using System.Net;
-using Microsoft.Extensions.Options;
+using System.Net.Mail;
 
 namespace PasswordManager.Utils
 {
@@ -16,18 +16,20 @@ namespace PasswordManager.Utils
 
         public async Task SendResetPasswordEmail(string resetPasswordEmailLink, string ToEmail)
         {
-            var smptClient = new SmtpClient();
+            var smptClient = new SmtpClient
+            {
+                Host = emailSettings.Host,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Port = 587,
+                Credentials = new NetworkCredential(emailSettings.Email, emailSettings.Password),
+                EnableSsl = true
+            };
 
-            smptClient.Host = emailSettings.Host;
-            smptClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smptClient.UseDefaultCredentials = false;
-            smptClient.Port = 587;
-            smptClient.Credentials = new NetworkCredential(emailSettings.Email, emailSettings.Password);
-            smptClient.EnableSsl = true;
-
-            var mailMessage = new MailMessage();
-
-            mailMessage.From = new MailAddress(emailSettings.Email);
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress(emailSettings.Email)
+            };
             mailMessage.To.Add(ToEmail);
 
             mailMessage.Subject = "Password Manager | Şifre Sıfırlama Bağlantısı";

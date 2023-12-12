@@ -66,9 +66,10 @@ builder.Services.AddIdentity<AppUser, AppRole>(options =>
 
 builder.Services.ConfigureApplicationCookie(opt =>
 {
-    var cookieBuilder = new CookieBuilder();
-
-    cookieBuilder.Name = "PasswordManagerCookie";
+    var cookieBuilder = new CookieBuilder
+    {
+        Name = "PasswordManagerCookie"
+    };
     opt.LoginPath = new PathString("/Session/SignIn");
     opt.LogoutPath = new PathString("/Session/SignOut");
     opt.Cookie = cookieBuilder;

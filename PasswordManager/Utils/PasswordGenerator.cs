@@ -8,17 +8,13 @@ namespace PasswordManager.Utils
         public static string GeneratePassword()
         {
             const string characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
-
-            StringBuilder characterSet = new StringBuilder(characters);
-
-            using var rng = new RNGCryptoServiceProvider();
-            var byteArray = new byte[1];
-            StringBuilder password = new StringBuilder();
+            StringBuilder password = new();
+            byte[] randomNumber = new byte[1];
 
             for (int i = 0; i < 12; i++)
             {
-                rng.GetBytes(byteArray);
-                var randomChar = characterSet[byteArray[0] % characterSet.Length];
+                RandomNumberGenerator.Fill(randomNumber);
+                var randomChar = characters[randomNumber[0] % characters.Length];
                 password.Append(randomChar);
             }
 

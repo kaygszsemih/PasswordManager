@@ -10,6 +10,8 @@
 
         public string Password { get; set; }
 
+        public string UserID { get; set; }
+
         public int CategoryID { get; set; }
     }
 }
