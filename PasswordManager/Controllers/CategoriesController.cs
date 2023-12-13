@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
+using PasswordManager.Filters;
 using PasswordManager.Models;
 using PasswordManager.Repositories;
 using PasswordManager.ViewModels;
@@ -49,12 +50,16 @@ namespace PasswordManager.Controllers
                 return RedirectToAction(nameof(CreateNewCategory));
             }
 
+            var currentUser = await userManager.GetUserAsync(User);
+            categoriesViewModel.UserID = currentUser.Id;
+
             await categoryRepo.CreateAsync(mapper.Map<Categories>(categoriesViewModel));
             toastNotification.AddSuccessToastMessage("Yeni Kategori Kaydı Başarılı!");
 
             return RedirectToAction(nameof(CategoryList));
         }
 
+        [ServiceFilter(typeof(NotFoundFilter<Categories>))]
         public async Task<IActionResult> UpdateCategory(int id)
         {
             var data = await categoryRepo.GetByIdAsync(id);
@@ -81,7 +86,7 @@ namespace PasswordManager.Controllers
             return RedirectToAction(nameof(CategoryList));
         }
 
-        [HttpPost]
+        [ServiceFilter(typeof(NotFoundFilter<Categories>))]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var data = await categoryRepo.GetByIdAsync(id);

@@ -11,6 +11,7 @@ namespace PasswordManager.Mapping
             CreateMap<MyPasswords, MyPasswordsViewModel>().ReverseMap();
             CreateMap<MyPasswords, MyPasswordWithCategory>().ReverseMap();
             CreateMap<Categories, CategoriesViewModel>().ReverseMap();
+            CreateMap<AppUser, UserInfoViewModel>().ReverseMap();
         }
     }
 }

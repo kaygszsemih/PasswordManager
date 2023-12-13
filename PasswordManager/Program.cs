@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
+using PasswordManager.Filters;
 using PasswordManager.Mapping;
 using PasswordManager.Models;
 using PasswordManager.OptionModels;
@@ -39,13 +40,12 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Emai
 builder.Services.AddScoped<PasswordResetMail>();
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddFluentValidationAutoValidation(options =>
-    options.DisableDataAnnotationsValidation = true);
+builder.Services.AddFluentValidationAutoValidation(options => options.DisableDataAnnotationsValidation = true);
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<MyPasswordsValidator>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(typeof(MapProfile));
-//builder.Services.AddScoped(typeof(NotFoundFilter<>));
+builder.Services.AddScoped(typeof(NotFoundFilter<>));
 
 builder.Services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromHours(1));
 

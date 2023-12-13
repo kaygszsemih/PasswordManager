@@ -72,7 +72,7 @@ namespace PasswordManager.Controllers
                 return View();
             }
 
-            var result = await userManager.CreateAsync(new() { UserName = signUpViewModel.UserName, PhoneNumber = signUpViewModel.PhoneNumber, Email = signUpViewModel.Email }, signUpViewModel.PasswordConfirm);
+            var result = await userManager.CreateAsync(new() { UserName = signUpViewModel.UserName, PhoneNumber = signUpViewModel.PhoneNumber, Email = signUpViewModel.Email, CreatedDate = DateTime.Now }, signUpViewModel.PasswordConfirm);
 
             if (!result.Succeeded)
             {

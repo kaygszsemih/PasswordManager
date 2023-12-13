@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
+using PasswordManager.Filters;
 using PasswordManager.Models;
 using PasswordManager.Repositories;
 using PasswordManager.Utils;
@@ -67,12 +68,15 @@ namespace PasswordManager.Controllers
             return RedirectToAction(nameof(PasswordList));
         }
 
+        [ServiceFilter(typeof(NotFoundFilter<MyPasswords>))]
         public async Task<IActionResult> UpdatePassword(int id)
         {
+            var currentUser = await userManager.GetUserAsync(User);
+
             var data = await passwordRepo.GetByIdAsync(id);
             var mapData = mapper.Map<MyPasswordsViewModel>(data);
 
-            var currentUser = await userManager.GetUserAsync(User);
+            
 
             var categoryData = await categoryRepo.GetAllAsync().Where(x => x.UserID == currentUser.Id).AsNoTracking().ToListAsync();
             ViewBag.Categories = mapper.Map<List<CategoriesViewModel>>(categoryData);
@@ -81,7 +85,7 @@ namespace PasswordManager.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdatePassword(MyPasswordsViewModel myPasswordsViewModel)
+        public async Task<IActionResult> UpdatePassword(MyPasswordsViewModel myPasswordsViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -89,13 +93,16 @@ namespace PasswordManager.Controllers
                 return RedirectToAction(nameof(UpdatePassword), new { id = myPasswordsViewModel.Id });
             }
 
+            var currentUser = await userManager.GetUserAsync(User);
+            myPasswordsViewModel.UserID = currentUser.Id;
+
             passwordRepo.Update(mapper.Map<MyPasswords>(myPasswordsViewModel));
             toastNotification.AddSuccessToastMessage("Şifre Kaydı Güncellendi!");
 
             return RedirectToAction(nameof(PasswordList));
         }
 
-        [HttpPost]
+        [ServiceFilter(typeof(NotFoundFilter<MyPasswords>))]
         public async Task<IActionResult> DeletePassword(int id)
         {
             var data = await passwordRepo.GetByIdAsync(id);

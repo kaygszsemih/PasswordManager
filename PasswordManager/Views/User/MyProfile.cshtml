@@ -1,0 +1,52 @@
+﻿@model UserInfoViewModel
+
+<body>
+    <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+        <div class="card-header">
+
+            <div class="card-title m-0">
+                <h3 class="fw-bolder m-0">Profil Detayları</h3>
+            </div>
+
+            <a href="~/User/PasswordChange/" class="btn btn-primary align-self-center">Şifre Sıfırla</a>
+            <a href="~/User/EditProfile/" class="btn btn-primary align-self-center">Profili Düzenle</a>
+        </div>
+
+        <div class="card-body p-9">
+            <div class="row mb-7">
+                <label asp-for="UserName" class="col-lg-4 fw-bold text-muted">Kullanıcı Adı</label>
+                <div class="col-lg-8">
+                    <span class="fw-bolder fs-6 text-gray-800">@Model.UserName</span>
+                </div>
+            </div>
+
+            <div class="row mb-7">
+                <label asp-for="PhoneNumber" class="col-lg-4 fw-bold text-muted">Telefon</label>
+                <div class="col-lg-8 d-flex align-items-center">
+                    <span class="fw-bolder fs-6 text-gray-800 me-2">@Model.PhoneNumber</span>
+                </div>
+            </div>
+
+            <div class="row mb-7">
+                <label asp-for="Email" class="col-lg-4 fw-bold text-muted">E-Posta Adresi</label>
+                <div class="col-lg-8">
+                    <span class="fw-bolder fs-6 text-gray-800 me-2">@Model.Email</span>
+                </div>
+            </div>
+
+            <div class="row mb-7">
+                <label asp-for="CreatedDate" class="col-lg-4 fw-bold text-muted">Üye Olma Tarihi</label>
+                <div class="col-lg-8">
+                    <span class="fw-bolder fs-6 text-gray-800">@Model.CreatedDate</span>
+                </div>
+            </div>
+
+            <div class="row mb-7">
+                <label asp-for="UpdatedDate" class="col-lg-4 fw-bold text-muted">Son Değişiklik Tarihi</label>
+                <div class="col-lg-8">
+                    <span class="fw-bolder fs-6 text-gray-800">@Model.UpdatedDate</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

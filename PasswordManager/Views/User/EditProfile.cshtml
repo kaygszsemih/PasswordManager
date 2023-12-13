@@ -1,0 +1,77 @@
+﻿@model UserInfoViewModel
+
+<body>
+    <div class="card mb-5 mb-xl-10">
+
+        <div class="card-header border-0" data-bs-toggle="collapse" data-bs-target="#kt_account_profile_details" aria-expanded="true" aria-controls="kt_account_profile_details">
+
+            <div class="card-title m-0">
+                <h3 class="fw-bolder m-0">Profil Detayları</h3>
+            </div>
+
+        </div>
+
+        <div id="kt_account_settings_profile_details" class="collapse show">
+            <div asp-validation-summary=ModelOnly class="alert alert-danger" role="alert">
+            </div>
+            <form id="kt_account_profile_details_form" class="form" method="post" autocomplete="off" asp-controller="User" asp-action="EditProfile">
+                <input type="hidden" asp-for="Id" />
+                <div class="card-body border-top p-9">
+
+                    <div class="row mb-6">
+                        <label asp-for="UserName" class="col-lg-4 col-form-label fw-bold fs-6">Kullanıcı Adı</label>
+                        <div class="col-lg-8 fv-row">
+                            <input type="text" asp-for="UserName" class="form-control form-control-lg form-control-solid" />
+                            <span asp-validation-for="UserName" class="text-danger fw-bold"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-6">
+                        <label asp-for="Email" class="col-lg-4 col-form-label fw-bold fs-6">E-Posta Adresi</label>
+                        <div class="col-lg-8 fv-row">
+                            <input type="email" asp-for="Email" class="form-control form-control-lg form-control-solid" />
+                            <span asp-validation-for="Email" class="text-danger fw-bold"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-6">
+                        <label asp-for="PhoneNumber" class="col-lg-4 col-form-label fw-bold fs-6">Telefon Numarası</label>
+                        <div class="col-lg-8 fv-row">
+                            <input type="text" asp-for="PhoneNumber" maxlength="10" class="form-control form-control-lg form-control-solid" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger fw-bold"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card-footer d-flex justify-content-end py-6 px-9">
+                    <a href="~/User/MyProfile/" class="btn btn-light btn-active-light-primary me-2">Geri</a>
+                    <button type="submit" class="btn btn-success">Kaydet</button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    @section Scripts {
+        <script>
+            window.onload = function () {
+
+                var inputs = document.querySelectorAll('input');
+
+                for (var i = 0; i < inputs.length; i++) {
+                    if (inputs[i].id == "PhoneNumber") {
+                        inputs[i].addEventListener("keypress", function (evt) {
+                            var charCode = (evt.which) ? evt.which : evt.keyCode;
+                            if ((charCode < 48 || charCode > 57) && charCode != 44) {
+                                evt.preventDefault();
+                            }
+                        });
+                    }
+                }
+            }
+        </script>
+    }
+</body>

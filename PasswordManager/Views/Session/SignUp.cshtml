@@ -65,7 +65,7 @@
                         <!--begin::Input group-->
                         <div class="fv-row mb-7">
                             <label asp-for="PhoneNumber" class="form-label fw-bolder text-dark fs-6">Telefon Numarası</label>
-                            <input class="form-control form-control-lg form-control-solid" type="text" asp-for="PhoneNumber" autocomplete="off" />
+                            <input class="form-control form-control-lg form-control-solid" type="text" maxlength="10" asp-for="PhoneNumber" autocomplete="off" />
                             <span asp-validation-for="PhoneNumber" class="text-danger fw-bold"></span>
                         </div>
                         <!--end::Input group-->
@@ -113,17 +113,25 @@
         </div>
         <!--end::Authentication - Sign-up-->
     </div>
-    <!--end::Root-->
-    <!--end::Main-->
-    <!--begin::Javascript-->
+
     <script>var hostUrl = "assets/";</script>
-    <!--begin::Global Javascript Bundle(used by all pages)-->
     <script src="assets/plugins/global/plugins.bundle.js"></script>
     <script src="assets/js/scripts.bundle.js"></script>
-    <!--end::Global Javascript Bundle-->
-    <!--begin::Page Custom Javascript(used by this page)-->
-    @* <script src="assets/js/custom/authentication/sign-up/general.js"></script> *@
-    <!--end::Page Custom Javascript-->
-    <!--end::Javascript-->
+    <script>
+        window.onload = function () {
+
+            var inputs = document.querySelectorAll('input');
+
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].id == "PhoneNumber") {
+                    inputs[i].addEventListener("keypress", function (evt) {
+                        var charCode = (evt.which) ? evt.which : evt.keyCode;
+                        if ((charCode < 48 || charCode > 57) && charCode != 44) {
+                            evt.preventDefault();
+                        }
+                    });
+                }
+            }
+        }
+    </script>
 </body>
-<!--end::Body-->

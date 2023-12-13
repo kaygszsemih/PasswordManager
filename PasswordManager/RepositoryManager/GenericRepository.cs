@@ -20,10 +20,10 @@ namespace PasswordManager.RepositoryManager
             await context.SaveChangesAsync();
         }
 
-        public async void Delete(T entity)
+        public void Delete(T entity)
         {
             dbSet.Remove(entity);
-            await context.SaveChangesAsync();
+            context.SaveChanges();
         }
 
         public IQueryable<T> GetAllAsync()
@@ -36,10 +36,10 @@ namespace PasswordManager.RepositoryManager
             return await dbSet.FindAsync(id);
         }
 
-        public async void Update(T entity)
+        public void Update(T entity)
         {
             dbSet.Update(entity);
-            await context.SaveChangesAsync();
+            context.SaveChanges();
         }
     }
 }
