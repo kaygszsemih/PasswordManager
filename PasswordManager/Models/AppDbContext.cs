@@ -32,8 +32,8 @@ namespace PasswordManager.Models
             builder.Entity<AppUser>(x => x.Property(t => t.UpdatedDate).HasColumnType("timestamp without time zone"));
 
             builder.Entity<Categories>().HasMany(x => x.MyPasswords).WithOne(x => x.Categories).HasForeignKey(x => x.CategoryID);
-            builder.Entity<AppUser>().HasMany(x => x.MyPasswords).WithOne(x => x.AppUser).HasForeignKey(x => x.UserID);
-            builder.Entity<AppUser>().HasMany(x => x.Categories).WithOne(x => x.AppUser).HasForeignKey(x => x.UserID);
+            builder.Entity<AppUser>().HasMany(x => x.MyPasswords).WithOne(x => x.AppUser).HasForeignKey(x => x.UserID).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<AppUser>().HasMany(x => x.Categories).WithOne(x => x.AppUser).HasForeignKey(x => x.UserID).OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(builder);
         }

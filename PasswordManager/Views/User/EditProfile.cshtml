@@ -45,6 +45,7 @@
                 </div>
 
                 <div class="card-footer d-flex justify-content-end py-6 px-9">
+                    <button type="button" data-id="@Model.Id" id="deleteButton" class="btn btn-danger">Hesabı Sil</button>
                     <a href="~/User/MyProfile/" class="btn btn-light btn-active-light-primary me-2">Geri</a>
                     <button type="submit" class="btn btn-success">Kaydet</button>
                 </div>
@@ -72,6 +73,31 @@
                     }
                 }
             }
+        </script>
+        <script>
+            $('#deleteButton').on('click', function (e) {
+                e.preventDefault();
+
+                const passwordID = $(this).data("id");
+
+                Swal.fire({
+                    html: `<strong>Hesabınız Silmek İstediğinizden Emin Misiniz? Bu İşlem Geri Alınamaz.</strong>`,
+                    icon: "info",
+                    buttonsStyling: false,
+                    showCancelButton: true,
+                    confirmButtonText: "Evet, Eminim",
+                    cancelButtonText: 'Hayır, Geri Dön',
+                    customClass: {
+                        confirmButton: "btn btn-primary",
+                        cancelButton: 'btn btn-danger'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = `/User/RemoveAccount?id=${passwordID}`;
+                    }
+                });
+
+            });
         </script>
     }
 </body>

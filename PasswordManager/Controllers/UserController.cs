@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
+using PasswordManager.Filters;
 using PasswordManager.Models;
 using PasswordManager.ViewModels;
 
@@ -112,6 +113,28 @@ namespace PasswordManager.Controllers
 
             TempData["SuccessMessage"] = "Şifreniz Başarıyla Değiştirilmiştir.";
             return RedirectToAction(nameof(SignIn), "Session");
+        }
+
+        public async Task<IActionResult> RemoveAccount(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+
+            var result = await userManager.DeleteAsync(user);
+
+            if (result.Succeeded)
+            {
+                await signInManager.SignOutAsync();
+                return RedirectToAction(nameof(SignIn), "Session");
+            }
+
+            var errorViewModel = new ErrorViewModel();
+
+            foreach (var error in result.Errors)
+            {
+                errorViewModel.Errors.Add(error.Description);
+            }
+
+            return RedirectToAction("Error", "Home", errorViewModel);
         }
 
         public new async Task<IActionResult> SignOut()
