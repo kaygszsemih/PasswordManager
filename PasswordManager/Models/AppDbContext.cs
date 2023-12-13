@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Principal;
 
 namespace PasswordManager.Models
 {
@@ -46,7 +47,7 @@ namespace PasswordManager.Models
             {
                 if (item.Entity is BaseEntity baseEntity)
                 {
-                    switch (item.Entity)
+                    switch (item.State)
                     {
                         case EntityState.Added:
                             {
@@ -55,6 +56,8 @@ namespace PasswordManager.Models
                             }
                         case EntityState.Modified:
                             {
+                                Entry(baseEntity).Property(x => x.CreatedDate).IsModified = false;
+
                                 baseEntity.UpdatedDate = DateTime.Now;
                                 break;
                             }

@@ -76,8 +76,10 @@
 
                 tableRows.forEach(row => {
                     const dateRow = row.querySelectorAll('td');
-                    const realDate = moment(dateRow[3].innerHTML, "DD MMM YYYY, LT").format();
-                    dateRow[3].setAttribute('data-order', realDate);
+                    if (dateRow.length > 3) {
+                        const realDate = moment(dateRow[3].innerHTML, "DD MMM YYYY, LT").format();
+                        dateRow[3].setAttribute('data-order', realDate);
+                    }
                 });
 
                 datatable = $('#CategoryTable').DataTable({

@@ -9,7 +9,7 @@ namespace PasswordManager.Mapping
         public MapProfile()
         {
             CreateMap<MyPasswords, MyPasswordsViewModel>().ReverseMap();
-            CreateMap<MyPasswords, MyPasswordWithCategory>().ReverseMap();
+            CreateMap<MyPasswords, MyPasswordWithCategory>().ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Categories)).ReverseMap();
             CreateMap<Categories, CategoriesViewModel>().ReverseMap();
             CreateMap<AppUser, UserInfoViewModel>().ReverseMap();
         }

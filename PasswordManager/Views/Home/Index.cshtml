@@ -1,8 +1,26 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model List<MyPasswordWithCategory>
+
+@{
+    ViewData["Title"] = "Ana Sayfa";
+
+    var colors = new[] { "bg-primary", "bg-success", "bg-secondary", "bg-info", "bg-warning" };
+    var items = Model;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<body>
+    <div class="row g-5 g-xl-8">
+        @foreach (var item in items.Select((value, index) => new { value, index }))
+        {
+            var colorClass = colors[item.index % colors.Length];
+
+            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6">
+                <a href="~/Passwords/UpdatePassword?id=@item.value.Id" class="card @colorClass hoverable card-xl-stretch mb-xl-8">
+                    <div class="card-body text-center">
+                        <div class="text-gray-900 fw-bolder fs-2 mb-2 mt-5">@item.value.Description</div>
+                        <div class="fw-bold text-gray-400">@item.value.URL</div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</body>

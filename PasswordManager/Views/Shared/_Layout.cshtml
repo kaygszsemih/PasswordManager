@@ -167,6 +167,12 @@
                             <div class="text-dark h-15px" style="margin-left:10px"><h4>@ViewData["Title"]</h4></div>
 
                         </div>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="ml-auto d-flex flex-column">
+                                <div class="text-dark mt-5"><h4>@User.Identity.Name</h4></div>
+                            </div>
+                        }
                     </div>
                 </div>
 
@@ -210,11 +216,11 @@
 
     <script>var hostUrl = "assets/";</script>
 
-    <script src="~/assets/plugins/global/plugins.bundle.js"></script>
-    <script src="~/assets/js/scripts.bundle.js"></script>
+    <script src="~/assets/plugins/global/plugins.bundle.js"></script> 
+    <script src="~/assets/js/scripts.bundle.js"></script> 
     <script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>
-    <script src="~/assets/js/widgets.bundle.js"></script>
-    <script src="~/assets/js/custom/widgets.js"></script>
+    <script src="~/assets/js/widgets.bundle.js"></script> 
+    <script src="~/assets/js/custom/widgets.js"></ script>
     <script src="~/assets/js/custom/apps/chat/chat.js"></script>
     <script src="~/assets/js/custom/utilities/modals/upgrade-plan.js"></script>
     <script src="~/assets/js/custom/utilities/modals/create-app.js"></script>
